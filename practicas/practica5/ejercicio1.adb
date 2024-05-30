@@ -4,68 +4,59 @@ procedure Ejercicio1 is
     entry ingresoAuto;
     entry ingresoCamioneta;
     entry ingresoCamion;
-    entry salidaAuto;
-    entry salidaCamioneta;
-    entry salidaCamion;
+    entry salida (peso : Integer);
   end puente;
 
   task type auto;
   task type camioneta;
   task type camion;
 
-  autos: array (1..A) of auto;
-  camionetas: array (1..B) of camioneta;
-  camiones: array (1..C) of camion;
+  autos      : array (1 .. A) of auto;
+  camionetas : array (1 .. B) of camioneta;
+  camiones   : array (1 .. C) of camion;
 
   task body auto is
   begin
     puente.ingresoAuto;
     --  cruzando el puente
-    puente.salidaAuto;
+    puente.salida (1);
   end auto;
 
   task body camioneta is
   begin
     puente.ingresoCamioneta;
     --  cruzando el puente
-    puente.salidaCamioneta;
+    puente.salida (2);
   end camioneta;
 
   task body camion is
   begin
     puente.ingresoCamion;
     --  cruzando el puente
-    puente.salidaCamion;
+    puente.salida (3);
   end camion;
 
   task body puente is
-    peso : Integer := 0;
+    pesoActual, pesoAuto : Integer := 0;
   begin
     loop
-      select when (peso + 1 <= 5) =>
+      select when (pesoActual + 1 <= 5) =>
         accept ingresoAuto do
-          peso := peso + 1;
+          pesoActual := pesoActual + 1;
         end ingresoAuto;
-      or when (peso + 2 <= 5) =>
+      or when (pesoActual + 2 <= 5) =>
         accept ingresoCamioneta do
-          peso := peso + 2;
+          pesoActual := peso + 2;
         end ingresoCamioneta;
-      or when (peso + 3 <= 5) =>
+      or when (pesoActual + 3 <= 5) =>
         accept ingresoCamion do
-          peso := peso + 3;
+          pesoActual := pesoActual + 3;
         end ingresoCamion;
       or
-        accept salidaAuto do
-          peso := peso - 1;
-        end salidaAuto;
-      or
-        accept salidaCamioneta do
-          peso := peso - 2;
-        end salidaCamioneta;
-      or
-        accept salidaCamion do
-          peso := peso - 3;
-        end salidaCamion;
+        accept salida (peso : Integer) do
+          pesoAuto := peso;
+        end salida;
+        pesoActual := pesoActual - peso;
       end select;
     end loop;
   end puente;
