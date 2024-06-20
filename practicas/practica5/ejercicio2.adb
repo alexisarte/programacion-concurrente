@@ -13,8 +13,7 @@ procedure Banco is
   begin
     select
       empleado.atenderCliente (100, comprobante);
-    or
-      delay (600.0);
+    or delay 600.0;
       null;
     end select;
   end cliente;
