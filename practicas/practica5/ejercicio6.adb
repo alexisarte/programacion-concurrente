@@ -11,20 +11,20 @@ procedure Money is
   end equipo;
 
   task juego is
-    entry totalPorGrupo(nroEquipo: in integer; total: in integer);
+    entry totalGrupo(nroEquipo: in integer; total: in integer);
   end juego;
 
   personas: array(1..20) of persona;
   equipos: array(1..5) of equipo;
 
   task body equipo is
-    nroEquipo: integer;
+    id: integer;
     total: integer;
     integrantes: array(1..5) of integer;
   begin
 
     accept identificar(nro: in integer) do
-      nroEquipo := nro;
+      id := nro;
     end identificar;
 
     for i in 1..4 loop
@@ -37,11 +37,13 @@ procedure Money is
       personas(integrantes(i)).iniciar;
     end loop;
 
-    accept contarDinero(monto: in integer) do
-      total := total + monto;
-    end contarDinero;
+    for i in 1..4 loop
+      accept contarDinero(montoPersona: in integer) do
+        total := total + montoPersona;
+      end contarDinero;
+    end loop;
 
-    juego.informarTotal(nroEquipo, total);
+    juego.totalGrupo(id, total);
 
   end equipo;
 
@@ -73,11 +75,11 @@ procedure Money is
     montosTotalesGrupos: array(1..5) of integer;
   begin
     for i in 1..5 loop
-      accept totalPorGrupo(nroEquipo: in integer; total: in integer) do
+      accept totalGrupo(nroEquipo: in integer; total: in integer) do
         montosTotalesGrupos(nroEquipo) := total;
-      end totalPorGrupo;
+      end totalGrupo;
     end loop;
-    equipoGanador := max(totalPorGrupo);
+      equipoGanador := max(montosTotalesGrupos);
     for i in 1..20 loop
       personas(i).nroEquipoGanador(equipoGanador);
     end loop;
